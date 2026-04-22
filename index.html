@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Real Deal Property — Portfolio Construction for Serious Investors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1893f8;
+    --green: #98da35;
+    --ink: #0a0e1a;
+    --ink-2: #11162a;
+    --ink-3: #1a1f36;
+    --line: rgba(255,255,255,0.08);
+    --text: #f4f5f8;
+    --text-mute: #8a91a6;
+    --text-dim: #5a6179;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, Helvetica, Arial, sans-serif;
+    background: var(--ink);
+    color: var(--text);
+    line-height: 1.5;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+  .mono { font-family: 'JetBrains Mono', 'SF Mono', monospace; font-feature-settings: "tnum"; }
+  .container { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+
+  .topbar { border-bottom: 1px solid var(--line); font-size: 13px; color: var(--text-mute); }
+  .topbar-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 32px; max-width: 1240px; margin: 0 auto;
+  }
+  .topbar a { color: var(--green); text-decoration: none; font-weight: 500; letter-spacing: 0.02em; }
+
+  nav.primary {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10, 14, 26, 0.82);
+    backdrop-filter: saturate(140%) blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 18px 32px; max-width: 1240px; margin: 0 auto; }
+  .brand { font-weight: 700; letter-spacing: -0.01em; font-size: 17px; }
+  .brand span { color: var(--blue); }
+  .nav-links { display: flex; gap: 32px; font-size: 14px; color: var(--text-mute); }
+  .nav-links a { color: inherit; text-decoration: none; transition: color .15s; }
+  .nav-links a:hover { color: var(--text); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; border-radius: 999px; font-weight: 500; font-size: 14px;
+    text-decoration: none; transition: all .2s ease;
+    border: 1px solid transparent; cursor: pointer;
+    letter-spacing: -0.005em;
+  }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-primary:hover { background: #0e82e4; transform: translateY(-1px); }
+  .btn-ghost { border-color: var(--line); color: var(--text); background: transparent; }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); }
+  .btn-lg { padding: 14px 24px; font-size: 15px; }
+
+  .hero { padding: 96px 0 80px; position: relative; overflow: hidden; }
+  .hero-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 80px; align-items: center; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 12px; color: var(--text-mute);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px;
+    margin-bottom: 28px;
+  }
+  .eyebrow::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+    box-shadow: 0 0 0 4px rgba(152, 218, 53, 0.15);
+  }
+  h1.hero-h {
+    font-size: clamp(40px, 5.2vw, 72px);
+    font-weight: 700; letter-spacing: -0.035em; line-height: 1.02;
+    margin-bottom: 24px;
+  }
+  h1.hero-h em { font-style: normal; color: var(--blue); }
+  .hero-sub {
+    font-size: 19px; color: var(--text-mute); max-width: 560px;
+    line-height: 1.55; margin-bottom: 36px;
+  }
+  .hero-ctas { display: flex; gap: 12px; align-items: center; margin-bottom: 48px; }
+  .hero-trust { display: flex; gap: 28px; padding-top: 28px; border-top: 1px solid var(--line); }
+  .hero-trust .item { display: flex; flex-direction: column; }
+  .hero-trust .num { font-size: 22px; font-weight: 600; color: var(--text); }
+  .hero-trust .lbl { font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
+
+  /* Video placeholder */
+  .video-placeholder {
+    position: relative; width: 100%; aspect-ratio: 16/9;
+    background: linear-gradient(135deg, #1a1f36 0%, #0a0e1a 70%);
+    border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all .25s ease;
+  }
+  .video-placeholder:hover { border-color: rgba(24, 147, 248, 0.4); }
+  .video-placeholder::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 25% 30%, rgba(24, 147, 248, 0.18), transparent 55%),
+      radial-gradient(circle at 75% 70%, rgba(152, 218, 53, 0.08), transparent 55%);
+  }
+  .video-placeholder.vertical { aspect-ratio: 4/5; border-radius: 20px; }
+  .play-btn {
+    position: relative; z-index: 2;
+    width: 76px; height: 76px; border-radius: 50%;
+    background: rgba(24, 147, 248, 0.95);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 20px 60px rgba(24, 147, 248, 0.35), 0 0 0 8px rgba(24, 147, 248, 0.12);
+    transition: transform .2s ease;
+  }
+  .video-placeholder:hover .play-btn { transform: scale(1.06); }
+  .play-btn::after {
+    content: ""; width: 0; height: 0;
+    border-left: 18px solid white; border-top: 11px solid transparent; border-bottom: 11px solid transparent;
+    margin-left: 5px;
+  }
+  .video-meta {
+    position: absolute; bottom: 20px; left: 20px; z-index: 2;
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--text); letter-spacing: 0.08em; text-transform: uppercase;
+    background: rgba(10, 14, 26, 0.7); backdrop-filter: blur(10px);
+    padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line);
+  }
+  .video-meta .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+  .video-cap {
+    position: absolute; top: 20px; right: 20px; z-index: 2;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-mute);
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+
+  section { padding: 96px 0; border-top: 1px solid var(--line); }
+  .section-head { margin-bottom: 64px; max-width: 720px; }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--blue); text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 16px; display: block;
+  }
+  h2 {
+    font-size: clamp(32px, 3.8vw, 48px); font-weight: 700;
+    letter-spacing: -0.03em; line-height: 1.08; margin-bottom: 20px;
+  }
+  h2 em { font-style: normal; color: var(--blue); }
+  .section-sub { font-size: 18px; color: var(--text-mute); max-width: 580px; }
+
+  .thesis {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border: 1px solid var(--line); border-radius: 20px; overflow: hidden;
+  }
+  .thesis > div { padding: 48px; }
+  .thesis .left { border-right: 1px solid var(--line); background: var(--ink-2); }
+  .thesis .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; text-transform: uppercase;
+    letter-spacing: 0.1em; margin-bottom: 20px; color: var(--text-dim);
+  }
+  .thesis .right .label { color: var(--green); }
+  .thesis h4 { font-size: 22px; font-weight: 600; margin-bottom: 12px; letter-spacing: -0.01em; }
+  .thesis p { color: var(--text-mute); font-size: 15px; line-height: 1.65; }
+  .thesis ul { list-style: none; margin-top: 20px; }
+  .thesis li { font-size: 14px; color: var(--text-mute); padding: 10px 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; }
+  .thesis li:last-child { border: 0; }
+  .thesis li span:last-child { color: var(--text); font-family: 'JetBrains Mono', monospace; }
+
+  .tiers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .tier {
+    padding: 32px 28px; border: 1px solid var(--line); border-radius: 16px;
+    background: var(--ink-2); transition: all .2s ease; cursor: pointer;
+    display: flex; flex-direction: column; min-height: 280px;
+  }
+  .tier:hover { border-color: var(--blue); background: var(--ink-3); transform: translateY(-2px); }
+  .tier-num { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-dim); margin-bottom: 20px; letter-spacing: 0.1em; }
+  .tier h3 { font-size: 20px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .tier .band { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--blue); margin-bottom: 16px; }
+  .tier p { font-size: 14px; color: var(--text-mute); line-height: 1.6; flex: 1; }
+  .tier .link { margin-top: 24px; font-size: 14px; color: var(--green); font-weight: 500; display: inline-flex; gap: 6px; align-items: center; }
+
+  .deals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .deal {
+    border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+    background: var(--ink-2); transition: all .2s ease;
+  }
+  .deal:hover { border-color: rgba(255,255,255,0.15); }
+  .deal-img {
+    aspect-ratio: 16/10; position: relative;
+    background: linear-gradient(135deg, #232844, #11162a);
+  }
+  .deal-img::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(circle at 30% 40%, rgba(24, 147, 248, 0.15), transparent 50%);
+  }
+  .deal-status {
+    position: absolute; top: 14px; right: 14px;
+    padding: 5px 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: rgba(152, 218, 53, 0.15); color: var(--green); border: 1px solid rgba(152, 218, 53, 0.3);
+  }
+  .deal-status.contract { background: rgba(24, 147, 248, 0.15); color: var(--blue); border-color: rgba(24, 147, 248, 0.3); }
+  .deal-body { padding: 24px; }
+  .deal-loc { font-size: 13px; color: var(--text-mute); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .deal-price { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .deal-type { font-size: 13px; color: var(--text-dim); margin-bottom: 20px; }
+  .deal-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding-top: 20px; border-top: 1px solid var(--line); }
+  .stat .lbl { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .stat .val { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 500; }
+  .stat .val.pos { color: var(--green); }
+
+  .process { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+  .process-list { border-top: 1px solid var(--line); }
+  .step {
+    display: grid; grid-template-columns: 56px 1fr; gap: 20px;
+    padding: 24px 0; border-bottom: 1px solid var(--line);
+  }
+  .step-num { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--blue); padding-top: 2px; }
+  .step h4 { font-size: 17px; font-weight: 600; margin-bottom: 6px; letter-spacing: -0.01em; }
+  .step p { font-size: 14px; color: var(--text-mute); line-height: 1.6; }
+
+  .trust-row {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+  }
+  .trust-row > div { padding: 32px; border-right: 1px solid var(--line); }
+  .trust-row > div:last-child { border-right: 0; }
+  .trust-row .n { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; color: var(--blue); margin-bottom: 8px; }
+  .trust-row .l { font-size: 13px; color: var(--text-mute); }
+
+  .testimonial {
+    padding: 64px; border: 1px solid var(--line); border-radius: 20px;
+    background: var(--ink-2); position: relative; overflow: hidden;
+  }
+  .testimonial::before {
+    content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--green);
+  }
+  .testimonial blockquote {
+    font-size: 26px; line-height: 1.4; letter-spacing: -0.015em;
+    font-weight: 400; margin-bottom: 32px; max-width: 880px;
+  }
+  .testimonial .attr { display: flex; align-items: center; gap: 16px; }
+  .testimonial .avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--green));
+  }
+  .testimonial .name { font-weight: 600; font-size: 15px; }
+  .testimonial .role { font-size: 13px; color: var(--text-mute); }
+
+  .guarantee {
+    display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px;
+    padding: 48px; border: 1px solid rgba(152, 218, 53, 0.25);
+    border-radius: 20px; background: linear-gradient(135deg, rgba(152, 218, 53, 0.04), transparent);
+  }
+  .guarantee .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border-radius: 999px;
+    background: rgba(152, 218, 53, 0.12); color: var(--green);
+    font-size: 12px; font-weight: 500; letter-spacing: 0.04em;
+    text-transform: uppercase; margin-bottom: 20px;
+  }
+  .guarantee h3 { font-size: 28px; letter-spacing: -0.02em; line-height: 1.15; }
+  .guarantee ul { list-style: none; }
+  .guarantee li { padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 15px; display: flex; gap: 14px; align-items: flex-start; }
+  .guarantee li:last-child { border: 0; }
+  .guarantee li::before {
+    content: ""; width: 16px; height: 16px; border-radius: 50%;
+    background: rgba(152, 218, 53, 0.15); border: 1px solid var(--green);
+    flex-shrink: 0; margin-top: 2px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='%2398da35'%3E%3Cpath d='M10.28 3.22a.75.75 0 010 1.06l-5 5a.75.75 0 01-1.06 0l-2.5-2.5a.75.75 0 011.06-1.06L4.75 7.69l4.47-4.47a.75.75 0 011.06 0z'/%3E%3C/svg%3E");
+    background-size: 10px; background-position: center; background-repeat: no-repeat;
+  }
+
+  /* Map CTA band */
+  .map-cta {
+    padding: 72px 64px; text-align: center;
+    border: 1px solid var(--line); border-radius: 24px;
+    background: radial-gradient(ellipse at center, rgba(24, 147, 248, 0.06), transparent 70%);
+  }
+  .map-cta h3 { font-size: clamp(28px, 3vw, 40px); letter-spacing: -0.02em; margin-bottom: 12px; }
+  .map-cta h3 em { font-style: normal; color: var(--blue); }
+  .map-cta p { color: var(--text-mute); font-size: 16px; max-width: 480px; margin: 0 auto 28px; }
+
+  /* Deploy cards */
+  .deploy { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .deploy-card {
+    padding: 32px 28px; border: 1px solid var(--line); border-radius: 16px;
+    background: var(--ink-2); position: relative; transition: all .2s ease;
+    display: flex; flex-direction: column; min-height: 260px;
+  }
+  .deploy-card:hover { border-color: rgba(255,255,255,0.15); }
+  .deploy-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: rgba(24, 147, 248, 0.12); color: var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; margin-bottom: 20px;
+  }
+  .deploy-card h4 { font-size: 18px; font-weight: 600; margin-bottom: 10px; letter-spacing: -0.01em; }
+  .deploy-card p { font-size: 14px; color: var(--text-mute); line-height: 1.6; flex: 1; }
+  .deploy-card .action { margin-top: 20px; font-size: 14px; color: var(--green); font-weight: 500; }
+  .deploy-card.soon .action { color: var(--text-dim); }
+  .soon-badge {
+    position: absolute; top: 20px; right: 20px;
+    padding: 4px 10px; border-radius: 999px; font-size: 10px;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-dim);
+    border: 1px solid var(--line);
+  }
+
+  /* Full tier breakdown */
+  .full-tiers { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .full-tier {
+    padding: 40px; border: 1px solid var(--line); border-radius: 16px;
+    background: var(--ink-2); transition: all .2s ease;
+  }
+  .full-tier:hover { border-color: var(--blue); }
+  .full-tier .tier-ic {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: rgba(24, 147, 248, 0.12); color: var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; margin-bottom: 24px;
+  }
+  .full-tier h4 { font-size: 22px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .full-tier .band { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--blue); margin-bottom: 14px; letter-spacing: 0.02em; }
+  .full-tier .frame { font-size: 14px; color: var(--text-dim); margin-bottom: 18px; }
+  .full-tier .head-line { font-size: 16px; color: var(--text); margin-bottom: 20px; }
+  .full-tier .link { font-size: 14px; color: var(--green); font-weight: 500; }
+
+  /* IG grid */
+  .ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .ig-card {
+    aspect-ratio: 1; border-radius: 16px; overflow: hidden;
+    background: var(--ink-2); border: 1px solid var(--line);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 12px; position: relative; transition: all .2s ease; cursor: pointer;
+  }
+  .ig-card:hover { border-color: var(--green); }
+  .ig-card::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(24, 147, 248, 0.08), transparent 60%),
+      radial-gradient(circle at 70% 70%, rgba(152, 218, 53, 0.06), transparent 60%);
+  }
+  .ig-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    border: 1.5px solid var(--text-dim);
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ig-icon::before {
+    content: ""; width: 18px; height: 18px; border-radius: 50%;
+    border: 1.5px solid var(--text-dim);
+  }
+  .ig-icon::after {
+    content: ""; width: 4px; height: 4px; border-radius: 50%;
+    background: var(--text-dim); position: absolute; top: 7px; right: 7px;
+  }
+  .ig-card .lbl {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase;
+    position: relative; z-index: 2;
+  }
+  .ig-follow {
+    margin: 48px auto 0; display: flex; justify-content: center;
+  }
+  .ig-placeholder-note {
+    margin-top: 24px; text-align: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--text-dim); letter-spacing: 0.06em;
+  }
+
+  /* Fit CTA */
+  .fit-cta {
+    padding: 80px 48px; text-align: center;
+    background: var(--ink-2); border: 1px solid var(--line); border-radius: 20px;
+  }
+  .fit-cta h3 { font-size: clamp(32px, 3.5vw, 44px); letter-spacing: -0.02em; margin-bottom: 10px; }
+  .fit-cta h3 em { font-style: normal; color: var(--blue); }
+  .fit-cta p { color: var(--text-mute); font-size: 16px; margin-bottom: 28px; }
+
+  .final {
+    padding: 120px 0;
+    background: radial-gradient(ellipse at center, rgba(24, 147, 248, 0.08), transparent 60%);
+    text-align: center; border-top: 1px solid var(--line);
+  }
+  .final h2 { font-size: clamp(40px, 5vw, 64px); margin-bottom: 20px; }
+  .final p { font-size: 18px; color: var(--text-mute); max-width: 560px; margin: 0 auto 40px; }
+  .final .micro { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-dim); margin-top: 24px; letter-spacing: 0.04em; }
+
+  footer { padding: 64px 0 48px; border-top: 1px solid var(--line); }
+  .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.1fr 1fr; gap: 40px; margin-bottom: 48px; }
+  .footer-grid h5 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 16px; }
+  .footer-grid a { display: block; font-size: 14px; color: var(--text-mute); text-decoration: none; padding: 6px 0; }
+  .footer-grid a:hover { color: var(--text); }
+  .footer-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 32px; border-top: 1px solid var(--line);
+    font-size: 12px; color: var(--text-dim);
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid, .thesis, .process, .guarantee,
+    section > .container > div[style*="grid-template-columns: 1fr 1.4fr"] { grid-template-columns: 1fr !important; gap: 40px !important; }
+    .thesis .left { border-right: 0; border-bottom: 1px solid var(--line); }
+    .tiers, .deploy, .full-tiers { grid-template-columns: repeat(2, 1fr); }
+    .deals, .ig-grid { grid-template-columns: 1fr; }
+    .map-cta, .fit-cta { padding: 48px 24px; }
+    .trust-row { grid-template-columns: repeat(2, 1fr); }
+    .trust-row > div { border-right: 0; border-bottom: 1px solid var(--line); }
+    .nav-links { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .testimonial { padding: 32px; }
+    .testimonial blockquote { font-size: 20px; }
+    .guarantee { padding: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span>How Jake &amp; Steve built $40M in property portfolios</span>
+    <a href="#">Read the playbook &rarr;</a>
+  </div>
+</div>
+
+<nav class="primary">
+  <div class="nav-inner">
+    <div class="brand">Real Deal<span>.</span></div>
+    <div class="nav-links">
+      <a href="#tiers">Who we help</a>
+      <a href="#deploy">Services</a>
+      <a href="#deals">Acquired deals</a>
+      <a href="#education">Education hub</a>
+      <a href="#about">About</a>
+      <a href="#landing">Landing pages</a>
+    </div>
+    <a href="#final" class="btn btn-primary">Book a discovery call</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="border-top: 0; padding-top: 96px;">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Australia's leading buyers advocacy</span>
+        <h1 class="hero-h">Most investors buy property.<br/>We build <em>portfolios</em>.</h1>
+        <p class="hero-sub">Structured acquisition across cashflow, projects and growth. Built for investors with $60K+ in cash or equity who want a system, not a single deal.</p>
+        <div class="hero-ctas">
+          <a href="#final" class="btn btn-primary btn-lg">See if I qualify &rarr;</a>
+          <a href="#thesis" class="btn btn-ghost btn-lg">How it works</a>
+        </div>
+        <div class="hero-trust">
+          <div class="item"><span class="num mono">$750M+</span><span class="lbl">Assets acquired</span></div>
+          <div class="item"><span class="num mono">500+</span><span class="lbl">Transactions</span></div>
+          <div class="item"><span class="num mono">$28M+</span><span class="lbl">Equity created</span></div>
+        </div>
+      </div>
+      <div class="video-placeholder vertical" data-video="1">
+        <div class="video-cap">Video 01</div>
+        <div class="play-btn"></div>
+        <div class="video-meta"><span class="dot"></span> Meet Jake, Founder &nbsp;·&nbsp; 60 sec</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THESIS -->
+<section id="thesis">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">01 &nbsp; The thesis</span>
+      <h2>Single purchases don't build wealth. <em>Structure does.</em></h2>
+      <p class="section-sub">Most investors chase the next property. We build assets that stack on each other, designed to scale capacity and compound equity.</p>
+    </div>
+
+    <div class="video-placeholder" style="margin-bottom: 56px;" data-video="2">
+      <div class="video-cap">Video 02</div>
+      <div class="play-btn"></div>
+      <div class="video-meta"><span class="dot"></span> The Portfolio Construction Approach &nbsp;·&nbsp; 45 sec</div>
+    </div>
+
+    <div class="thesis">
+      <div class="left">
+        <div class="label">The old way</div>
+        <h4>Chasing one deal at a time</h4>
+        <p>Buy when you can afford it. Hope it grows. Get stuck because the first purchase kills your borrowing capacity. Start again in five years.</p>
+        <ul>
+          <li><span>Approach</span><span>Opportunistic</span></li>
+          <li><span>Horizon</span><span>Single asset</span></li>
+          <li><span>Outcome</span><span>Unpredictable</span></li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="label">The Real Deal way</div>
+        <h4>Engineered portfolio construction</h4>
+        <p>Every acquisition is chosen against your capacity, cashflow and timeline. Yield pays for growth. Growth unlocks the next deal. The system compounds.</p>
+        <ul>
+          <li><span>Approach</span><span>Systematic</span></li>
+          <li><span>Horizon</span><span>7 to 10 year map</span></li>
+          <li><span>Outcome</span><span>$750M+ track record</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIERS -->
+<section id="tiers">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">02 &nbsp; Strategy tiers</span>
+      <h2>Your strategy is calibrated to your <em>capacity</em>.</h2>
+      <p class="section-sub">We don't run one playbook for everyone. Each tier is structured around your cash or equity position, your serviceability, and your timeline.</p>
+    </div>
+
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier-num">01 &nbsp; Foundation</div>
+        <h3>Foundation Strategy</h3>
+        <div class="band mono">$60K – $100K</div>
+        <p>Entering the market with a structured approach. Your first or next property with a clear long-term plan.</p>
+        <span class="link">View deals &rarr;</span>
+      </div>
+      <div class="tier">
+        <div class="tier-num">02 &nbsp; Growth</div>
+        <h3>Growth Strategy</h3>
+        <div class="band mono">$100K – $200K</div>
+        <p>Turn your position into a consistently growing portfolio. Build momentum with your next move.</p>
+        <span class="link">View deals &rarr;</span>
+      </div>
+      <div class="tier">
+        <div class="tier-num">03 &nbsp; Scaling</div>
+        <h3>Scaling Strategy</h3>
+        <div class="band mono">$200K – $400K</div>
+        <p>Scale your portfolio with system, structure and precision. Expand with real execution.</p>
+        <span class="link">View deals &rarr;</span>
+      </div>
+      <div class="tier">
+        <div class="tier-num">04 &nbsp; Advanced</div>
+        <h3>Advanced Strategy</h3>
+        <div class="band mono">$400K+</div>
+        <p>Deploy capital strategically at portfolio scale. High-capacity structuring for serious operators.</p>
+        <span class="link">View deals &rarr;</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEALS -->
+<section id="deals">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">03 &nbsp; Recent acquisitions</span>
+      <h2>Real deals. Real <em>performance</em>.</h2>
+      <p class="section-sub">A sample of recent client acquisitions, tracked from settlement to today.</p>
+    </div>
+
+    <div class="deals">
+      <div class="deal">
+        <div class="deal-img"><div class="deal-status">Settled</div></div>
+        <div class="deal-body">
+          <div class="deal-loc">◈ Werribee, VIC</div>
+          <div class="deal-price mono">$485,000</div>
+          <div class="deal-type">House &amp; Land</div>
+          <div class="deal-stats">
+            <div class="stat"><div class="lbl">Current Value</div><div class="val">$620,000</div></div>
+            <div class="stat"><div class="lbl">Growth</div><div class="val pos">+27.8%</div></div>
+            <div class="stat"><div class="lbl">Yield</div><div class="val pos">5.6%</div></div>
+            <div class="stat"><div class="lbl">Cashflow/wk</div><div class="val pos">+$48</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="deal">
+        <div class="deal-img"><div class="deal-status">Settled</div></div>
+        <div class="deal-body">
+          <div class="deal-loc">◈ Ripley, QLD</div>
+          <div class="deal-price mono">$420,000</div>
+          <div class="deal-type">House &amp; Land</div>
+          <div class="deal-stats">
+            <div class="stat"><div class="lbl">Current Value</div><div class="val">$545,000</div></div>
+            <div class="stat"><div class="lbl">Growth</div><div class="val pos">+29.8%</div></div>
+            <div class="stat"><div class="lbl">Yield</div><div class="val pos">5.9%</div></div>
+            <div class="stat"><div class="lbl">Cashflow/wk</div><div class="val pos">+$62</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="deal">
+        <div class="deal-img"><div class="deal-status contract">Under Contract</div></div>
+        <div class="deal-body">
+          <div class="deal-loc">◈ Springfield Lakes, QLD</div>
+          <div class="deal-price mono">$460,000</div>
+          <div class="deal-type">House</div>
+          <div class="deal-stats">
+            <div class="stat"><div class="lbl">Current Value</div><div class="val">$595,000</div></div>
+            <div class="stat"><div class="lbl">Growth</div><div class="val pos">+29.3%</div></div>
+            <div class="stat"><div class="lbl">Yield</div><div class="val pos">5.7%</div></div>
+            <div class="stat"><div class="lbl">Cashflow/wk</div><div class="val pos">+$55</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEE HOW THIS APPLIES -->
+<section>
+  <div class="container">
+    <div class="map-cta">
+      <span class="section-label" style="text-align: center; display: block;">See how this applies to you</span>
+      <h3>Get a strategy mapped to your <em>position</em>.</h3>
+      <p>A strategy calibrated to your capacity, timeline and goals.</p>
+      <a href="#final" class="btn btn-primary btn-lg">Map my strategy &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW WE DEPLOY CAPITAL -->
+<section id="deploy">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">04 &nbsp; Services</span>
+      <h2>How we <em>deploy capital</em>.</h2>
+      <p class="section-sub">Structured across different strategies depending on timing, opportunity and portfolio stage. Every property is selected for growth and income, the difference is simply how each strategy is applied.</p>
+    </div>
+
+    <div class="deploy">
+      <div class="deploy-card">
+        <div class="deploy-icon">↗</div>
+        <h4>Cashflow</h4>
+        <p>High yield, income producing assets designed to improve serviceability and reduce holding costs.</p>
+        <div class="action">Book a call &rarr;</div>
+      </div>
+      <div class="deploy-card">
+        <div class="deploy-icon">⌂</div>
+        <h4>Projects</h4>
+        <p>House and land, and development style opportunities focused on manufactured growth.</p>
+        <div class="action">Book a call &rarr;</div>
+      </div>
+      <div class="deploy-card soon">
+        <span class="soon-badge">Coming soon</span>
+        <div class="deploy-icon">◉</div>
+        <h4>Strategy</h4>
+        <p>Investment grade assets selected for long term capital appreciation.</p>
+        <div class="action">Register interest &rarr;</div>
+      </div>
+      <div class="deploy-card soon">
+        <span class="soon-badge">Coming soon</span>
+        <div class="deploy-icon">▦</div>
+        <h4>Commercial</h4>
+        <p>Larger scale opportunities beyond residential, including income producing and value add commercial assets.</p>
+        <div class="action">Register interest &rarr;</div>
+      </div>
+    </div>
+
+    <p style="margin-top: 32px; text-align: center; color: var(--text-dim); font-size: 14px;">The right strategy at the right time, not a one size fits all approach.</p>
+  </div>
+</section>
+
+<!-- DEAL WALKTHROUGH -->
+<section>
+  <div class="container">
+    <div style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 48px; align-items: center;">
+      <div>
+        <span class="section-label">Deal breakdown</span>
+        <h2 style="font-size: 36px;">Inside a real <em>acquisition</em>.</h2>
+        <p class="section-sub" style="margin-top: 16px;">Watch Jake walk through a recent client deal from strategy session to settlement. How the property was chosen, negotiated and secured.</p>
+      </div>
+      <div class="video-placeholder" data-video="3">
+        <div class="video-cap">Video 03</div>
+        <div class="play-btn"></div>
+        <div class="video-meta"><span class="dot"></span> Werribee, VIC Deal Walkthrough &nbsp;·&nbsp; 2 min</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section>
+  <div class="container">
+    <div class="testimonial">
+      <blockquote>"I'd bought one property before on my own and had no idea what I was actually building. Jake mapped out a 7 year plan against my borrowing capacity. Three acquisitions in 18 months, all performing."</blockquote>
+      <div class="attr">
+        <div class="avatar"></div>
+        <div>
+          <div class="name">Michael T.</div>
+          <div class="role">FIFO operator, WA &nbsp;·&nbsp; 3 properties, 18 months</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="container">
+    <div class="process">
+      <div>
+        <span class="section-label">04 &nbsp; The system</span>
+        <h2>Seven stages. <em>Every portfolio.</em></h2>
+        <p class="section-sub">The process behind every acquisition. Documented, repeatable, transparent.</p>
+      </div>
+      <div class="process-list">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div><h4>Foundation</h4><p>Borrowing capacity, cashflow and timeline mapped. We confirm where you actually stand before recommending anything.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div><h4>Strategy</h4><p>Your portfolio plan engineered across 5 to 10 years, with the right split of growth and yield for your position.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div><h4>Allocation</h4><p>Capital allocated to the right market, property type and structure. No generic picks.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div><h4>Acquisition</h4><p>We source, negotiate and secure the asset. Due diligence done before you sign.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-num">05</div>
+          <div><h4>Execution</h4><p>Settlement, property management handoff, and tenancy secured. You stay in the loop, we do the work.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-num">06</div>
+          <div><h4>Optimisation</h4><p>Ongoing review of the asset against the plan. Refinance triggers, equity releases and rent resets surfaced proactively.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-num">07</div>
+          <div><h4>Continuation</h4><p>Next acquisition activated when your position allows. The portfolio compounds.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GUARANTEE -->
+<section>
+  <div class="container">
+    <div class="guarantee">
+      <div>
+        <span class="badge">Trust &amp; accountability</span>
+        <h3>Built on structure. Backed by <em style="color: var(--green); font-style: normal;">accountability</em>.</h3>
+        <p style="color: var(--text-mute); margin-top: 16px; font-size: 15px;">Every acquisition follows a defined process, with aligned incentives and transparency at every stage.</p>
+      </div>
+      <ul>
+        <li>Buy-back protection available on selected opportunities</li>
+        <li>Structured acquisition process applied to every deal</li>
+        <li>Clear communication from strategy through to settlement</li>
+        <li>Independent due diligence on every property before sign-off</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CHOOSE YOUR STRATEGY (full breakdown) -->
+<section id="choose">
+  <div class="container">
+    <div class="section-head" style="text-align: center; margin-left: auto; margin-right: auto;">
+      <span class="section-label" style="display: inline-block;">Choose your strategy</span>
+      <h2>Select your investment level based on your <em>cash or equity</em>.</h2>
+      <p class="section-sub" style="margin-left: auto; margin-right: auto;">Each tier is calibrated to your capacity, not your experience.</p>
+    </div>
+
+    <div class="full-tiers">
+      <div class="full-tier">
+        <div class="tier-ic">◇</div>
+        <h4>Foundation Strategy</h4>
+        <div class="band">$60K – $100K available cash or equity</div>
+        <div class="frame">Entering the market with a structured approach</div>
+        <div class="head-line">Build your next property with a clear long term strategy.</div>
+        <span class="link">See deals for your position &rarr;</span>
+      </div>
+      <div class="full-tier">
+        <div class="tier-ic">↗</div>
+        <h4>Growth Strategy</h4>
+        <div class="band">$100K – $200K available cash or equity</div>
+        <div class="frame">Looking to build momentum with your next move</div>
+        <div class="head-line">Turn your position into a consistently growing portfolio.</div>
+        <span class="link">See deals for your position &rarr;</span>
+      </div>
+      <div class="full-tier">
+        <div class="tier-ic">▦</div>
+        <h4>Scaling Strategy</h4>
+        <div class="band">$200K – $400K available cash or equity</div>
+        <div class="frame">Ready to expand but need structure and precision</div>
+        <div class="head-line">Scale your portfolio with system and execution.</div>
+        <span class="link">See deals for your position &rarr;</span>
+      </div>
+      <div class="full-tier">
+        <div class="tier-ic">♚</div>
+        <h4>Advanced Strategy</h4>
+        <div class="band">$400K+ available cash or equity</div>
+        <div class="frame">High capacity position requiring advanced structuring</div>
+        <div class="head-line">Deploy capital strategically at scale.</div>
+        <span class="link">See deals for your position &rarr;</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST ROW -->
+<section>
+  <div class="container">
+    <div class="trust-row">
+      <div><div class="n mono">$750M+</div><div class="l">Assets acquired</div></div>
+      <div><div class="n mono">500+</div><div class="l">Transactions</div></div>
+      <div><div class="n mono">7–8%</div><div class="l">Yield focus</div></div>
+      <div><div class="n mono">119+</div><div class="l">5 star reviews</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- NOT SURE WHERE YOU FIT -->
+<section>
+  <div class="container">
+    <div class="fit-cta">
+      <h3>Not sure <em>where you fit</em>?</h3>
+      <p>Book a call and we'll map it out for you.</p>
+      <a href="#final" class="btn btn-primary btn-lg">Book a discovery call &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- REAL DEALS REAL CLIENTS REAL RESULTS -->
+<section id="results-feed">
+  <div class="container">
+    <div class="section-head" style="text-align: center; margin-left: auto; margin-right: auto;">
+      <span class="section-label" style="display: inline-block;">Real deals. Real clients. Real results.</span>
+      <h2>Follow along as we build <em>portfolios in real time</em>.</h2>
+    </div>
+
+    <div class="ig-grid">
+      <div class="ig-card">
+        <div class="ig-icon"></div>
+        <span class="lbl">Placeholder &nbsp;·&nbsp; Deal closed</span>
+      </div>
+      <div class="ig-card">
+        <div class="ig-icon"></div>
+        <span class="lbl">Placeholder &nbsp;·&nbsp; Client update</span>
+      </div>
+      <div class="ig-card">
+        <div class="ig-icon"></div>
+        <span class="lbl">Placeholder &nbsp;·&nbsp; New acquisition</span>
+      </div>
+    </div>
+
+    <div class="ig-follow">
+      <a href="#" class="btn btn-ghost btn-lg">Follow us on Instagram &rarr;</a>
+    </div>
+    <div class="ig-placeholder-note">Feed will populate live via Instagram embed</div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section id="final" class="final">
+  <div class="container">
+    <span class="section-label" style="text-align: center; display: block;">Ready?</span>
+    <h2>If you're serious, <em>start here</em>.</h2>
+    <p>Book a 30 minute strategy call. We'll map your position, your capacity, and whether we're the right fit.</p>
+    <a href="#" class="btn btn-primary btn-lg">Book a discovery call &rarr;</a>
+    <div class="micro">Limited strategy sessions available weekly</div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="brand" style="margin-bottom: 16px;">Real Deal<span>.</span></div>
+        <p style="font-size: 14px; color: var(--text-mute); max-width: 280px;">We help people from all walks of life generate wealth through property investment.</p>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <a href="#">About Us</a>
+        <a href="#">Services</a>
+        <a href="#">Contact</a>
+      </div>
+      <div>
+        <h5>Services</h5>
+        <a href="#">Investment Strategy</a>
+        <a href="#">Buyer's Advocacy</a>
+        <a href="#">Portfolio Review</a>
+      </div>
+      <div>
+        <h5>Investment Locations</h5>
+        <a href="#">Melbourne Property Investment</a>
+        <a href="#">Victoria Property Investment</a>
+        <a href="#">Sydney Property Investment</a>
+        <a href="#">Queensland Property Investment</a>
+        <a href="#">Perth Property Investment</a>
+        <a href="#">Darwin Property Investment</a>
+        <a href="#">Adelaide Property Investment</a>
+      </div>
+      <div>
+        <h5>Get in touch</h5>
+        <a href="tel:1300000000">1300 000 000</a>
+        <a href="mailto:info@realdeal.com.au">info@realdeal.com.au</a>
+        <a href="#">Melbourne, VIC Australia</a>
+      </div>
+    </div>
+    <div class="footer-meta">
+      <div>© 2026 Real Deal Property</div>
+      <div class="mono">Built for serious operators</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
